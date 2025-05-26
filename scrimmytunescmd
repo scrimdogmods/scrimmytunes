@@ -1,0 +1,78 @@
+#!/bin/bash
+
+ProgName=$(basename $0)
+
+sub_help(){
+    echo "Usage: $ProgName <subcommand> [options]"
+    echo "Subcommands:"
+    echo "    start     Start the ScrimmyTunes service"
+    echo "    stop      Stop the ScrimmyTunes service"
+    echo "    restart   Restart the ScrimmyTunes service"
+    echo "    logs      View logs for ScrimmyTunes"
+    echo "    startup   Toggle whether ScrimmyTunes will launch on startup"
+    echo ""
+    echo "For help with each subcommand run:"
+    echo "$ProgName <subcommand> -h|--help"
+    echo ""
+}
+
+sub_start(){
+    sudo systemctl start ScrimmyTunes
+}
+
+sub_stop(){
+    sudo systemctl stop ScrimmyTunes
+}
+
+sub_restart(){
+    sudo systemctl restart ScrimmyTunes
+}
+
+sub_logs(){
+    journalctl -u ScrimmyTunes -e -f
+}
+
+sub_startup(){
+    option=$1
+    case $option in
+        "--enable" | "-e")
+            echo "Enabling ScrimmyTunes launching on startup"
+            sudo systemctl enable ScrimmyTunes;;
+        "--disable" | "-d")
+            echo "Disabling ScrimmyTunes launching on startup"
+            sudo systemctl disable ScrimmyTunes;;
+        "-h" | "--help")
+            echo "Usage: $ProgName startup [options]"
+            echo "Toggles whether ScrimmyTunes will be started on system startup"
+            echo ""
+            echo "Options:"
+            echo "    -e, --enable    Enable starting ScrimmyTunes on startup"
+            echo "    -d, --disable   Disable starting ScrimmyTunes on startup"
+            echo "";;
+        *)
+            if test -f /etc/systemd/system/default.target.wants/ScrimmyTunes.service; then
+                echo "Disabling ScrimmyTunes launching on startup"
+                sudo systemctl disable ScrimmyTunes
+            else
+                echo "Enabling ScrimmyTunes launching on startup"
+                sudo systemctl enable ScrimmyTunes
+            fi;;
+    esac
+
+}
+
+subcommand=$1
+case $subcommand in
+    "" | "-h" | "--help")
+        sub_help
+        ;;
+    *)
+        shift
+        sub_${subcommand} $@
+        if [ $? = 127 ]; then
+            echo "Error: '$subcommand' is not a known subcommand." >&2
+            echo "       Run '$ProgName --help' for a list of known subcommands." >&2
+            exit 1
+        fi
+        ;;
+esac

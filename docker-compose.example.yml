@@ -1,0 +1,8 @@
+services:
+  ScrimmyTunes:
+    build: .
+    volumes:
+      - ./config:/ScrimmyTunes/config/
+      - ./audio_cache:/ScrimmyTunes/audio_cache
+      - ./data:/ScrimmyTunes/data
+      - ./logs:/ScrimmyTunes/logs
