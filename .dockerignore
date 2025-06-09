@@ -1,0 +1,21 @@
+# Runtime
+audio_cache/
+bin/
+data/
+logs/
+ScrimmyTunes/__pycache__/
+ScrimmyTunes/lib/__pycache__/
+
+# Docker
+.dockerignore
+Dockerfile
+
+# Git
+.git/
+.gitattributes
+.gitignore
+
+# IDE
+.idea/
+.vscode/
+#
