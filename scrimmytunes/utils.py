@@ -10,10 +10,8 @@ import unicodedata
 from functools import wraps
 from typing import TYPE_CHECKING, Any, Callable, Iterable, List, Set, Union
 
-# protected imports to keep run.py from breaking on missing packages.
 try:
     import colorlog
-
     COLORLOG_LOADED = True
 except ImportError:
     COLORLOG_LOADED = False
@@ -29,7 +27,6 @@ from .exceptions import PermissionsError
 
 if TYPE_CHECKING:
     from discord import Member, StageChannel, VoiceChannel
-
     from .bot import ScrimmyTunes
 
 log = logging.getLogger(__name__)
@@ -38,13 +35,6 @@ log = logging.getLogger(__name__)
 def _add_logger_level(levelname: str, level: int, *, func_name: str = "") -> None:
     """
     Add a logging function and level to the ScrimmyTunes logger.
-
-    :param: levelname:
-        The reference name of the level, e.g. DEBUG, WARNING, etc
-    :param: level:
-        Numeric logging level
-    :param: func_name:
-        The name of the logger function to log to a level, e.g. "info" for log.info(...)
     """
     _func_prototype = (
         "def {logger_func_name}(self, message, *args, **kwargs):\n"
@@ -59,14 +49,11 @@ def _add_logger_level(levelname: str, level: int, *, func_name: str = "") -> Non
     setattr(logging, levelname, level)
     logging.addLevelName(level, levelname)
 
-    # TODO: this is cool and all, but there is likely a better way to do this.
-    # we should probably be extending logging.getLoggerClass() instead
-    exec(  # pylint: disable=exec-used
+    exec(
         _func_prototype.format(logger_func_name=func_name, levelname=levelname),
         logging.__dict__,
-        locals(),
     )
-    setattr(logging.Logger, func_name, eval(func_name))  # pylint: disable=eval-used
+    setattr(logging.Logger, func_name, logging.__dict__[func_name]) # pylint: disable=eval-used
 
 
 def setup_loggers() -> None:
