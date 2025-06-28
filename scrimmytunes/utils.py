@@ -53,7 +53,7 @@ def _add_logger_level(levelname: str, level: int, *, func_name: str = "") -> Non
         _func_prototype.format(logger_func_name=func_name, levelname=levelname),
         logging.__dict__,
     )
-    setattr(logging.Logger, func_name, logging.__dict__[func_name]) # pylint: disable=eval-used
+    setattr(logging.Logger, func_name, logging.__dict__[func_name])
 
 
 def setup_loggers() -> None:
