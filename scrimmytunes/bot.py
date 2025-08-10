@@ -1099,7 +1099,7 @@ class ScrimmyTunes(discord.Client):
 
         embed = discord.Embed(title=message, color=3800852)
         embed.set_thumbnail(url="http://afog.site/scrimmytunes/img/st.png")
-        embed.set_footer(text="Provided by ScrimdogMods, ScrimmyTunes on A Family of Gaming (AFOG)", icon_url="http://afog.site/scrimmytunes/img/st.png")
+        embed.set_footer(text="Provided by ScrimmyBots, A multi server application", icon_url="http://afog.site/scrimmytunes/img/st.png")
         print(f"Now playing: {entry.title} → {np_channel}")
         print(f"Now playing: {entry.title} → {np_channel}")
         self.server_data[guild.id].last_np_msg = await self.safe_send_message(
